@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { memo, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import useApi from '../../hooks/useApi';
 import { Reviews } from '../../pages';
 import { useSelector } from 'react-redux';
+import useApi from '../../Hooks/useApi';
 
 const Review = ({ productId }) => {
     const { user } = useSelector(state => state.auth);
