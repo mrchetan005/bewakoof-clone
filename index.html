@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="shortcut icon"
+			type="image/x-icon"
+			href="/assets/icons/favicon_logo.webp"
+		/>
+		<link
+			rel="apple-touch-icon"
+			sizes="192x192"
+			href="/assets/icons/bewkoof-logo.webp"
+		/>
+		<link rel="icon" href="/assets/icons/bewkoof-logo.webp" sizes="192x192" />
+		<title>
+			Online Fashion Shopping for Men, Women, Accessories - Bewakoof.com
+		</title>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/main.jsx"></script>
+		<script>
+			const token = localStorage.getItem("auth_token_bewkoof");
+			let timerId = null;
+			if (token) {
+				const user = JSON.parse(localStorage.getItem("user_bewkoof"));
+				const title1 = `Hello, ${
+					user.name[0].toUpperCase() + user.name.toLowerCase().slice(1)
+				}`;
+				const title2 = `SHOP NOW!`;
+				let flag = false;
+				timerId = setInterval(() => {
+					document.title = flag ? title1 : title2;
+					flag = !flag;
+				}, 5000);
+			} else {
+				clearInterval(timerId);
+				document.title = `Online Fashion Shopping for Men, Women, Accessories - Bewakoof.com`
+			}
+		</script>
+	</body>
+</html>
