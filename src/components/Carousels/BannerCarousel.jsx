@@ -1,35 +1,9 @@
 // import function to register Swiper custom elements
 import { useEffect, useRef } from 'react';
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
-import { Link } from 'react-router-dom';
+import { Link, createSearchParams } from 'react-router-dom';
+import { bannerItems } from '../../constants';
 
-const bannerItems = [
-  { id: 1, filter: { brand: 'Bewakoof Air® 1.0', } },
-  { id: 2, filter: { subCategory: ['hoodie', 'sweater'], } },
-  { id: 3, filter: { brand: ['OFFICIAL NARUTO MERCHANDISE'], } },
-  { id: 4, filter: { brand: ['OFFICIAL COCA COLA MERCHANDISE'], } }
-]
-
-// swiper parameters
-// const swiperParams = {
-//   slidesPerView: 1,
-//   loop: true,
-//   spaceBetween: 10,
-//   speed: 1000,
-//   navigation: false,
-//   pagination: {
-//     clickable: true,
-//   },
-//   autoplay: {
-//     delay: 4000,
-//     disableOnInteraction: false,
-//   },
-//   breakpoints: {
-//     768: {
-//       slidesPerView: 3,
-//     },
-//   },
-// };
 
 const swiperParams = {
   slidesPerView: 3,
@@ -81,7 +55,7 @@ const Carousel = () => {
         {
           bannerItems?.map(({ id, filter }) => (
             <swiper-slide key={id} >
-              <Link to='/c' state={{ filter }}>
+              <Link to={`/Men?${createSearchParams(filter)}`} state={{ filter }}>
                 <img className='rounded-[12px] md:rounded-[0] aspect-[4/5] md:aspect-auto object-cover' src={`/assets/images/banner/${id}.jpg`} alt="" />
               </Link>
             </swiper-slide>

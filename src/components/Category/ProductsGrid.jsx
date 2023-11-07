@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 
 import { memo } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "../Card/Card";
 import { clearAllFilters } from "../../store/slices/filterSlice";
 import { LIMIT_PER_PAGE } from "../../constants";
 
 
-const ProductsGrid = ({ products, loadingProducts }) => {
+const ProductsGrid = () => {
+    const { products, loading } = useSelector(state => state.filter);
     const dispatch = useDispatch();
 
     const clearFilters = () => {
@@ -21,12 +22,12 @@ const ProductsGrid = ({ products, loadingProducts }) => {
                     ? <div className="ProductsGrid clear-both py-3 md:px-2 grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-4">
                         {
                             products?.map((product) => (
-                                <Card key={product._id} {...product} />
+                                <Card key={product?._id} {...product} />
                             ))
 
                         }
                     </div>
-                    : loadingProducts
+                    : loading
                         ?
                         <div className="ProductsGrid clear-both py-3 md:px-2 grid grid-cols-2 md:grid-cols-3 gap-3  lg:gap-10">
                             {

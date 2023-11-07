@@ -3,8 +3,8 @@ import { useState } from "react";
 import { SlArrowDown } from "react-icons/sl";
 import Portal from "../Portal";
 
-const CartModOptions = ({ options, title, heading, handleQty }) => {
-    const [selected, setSelected] = useState(options[0]);
+const CartModOptions = ({ options, title, heading, handleQty, initialQuantity = options[0] }) => {
+    const [selected, setSelected] = useState(initialQuantity);
     const [modalOpen, setModalOpen] = useState(false);
 
     const onClose = (e) => {
@@ -26,6 +26,7 @@ const CartModOptions = ({ options, title, heading, handleQty }) => {
         }
         setSelected(textContent);
         onClose(e);
+
     }
 
     return (

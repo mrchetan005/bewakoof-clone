@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { getDiscountedPrice, getRandomDiscount } from "../../Utils/CommonFunctions";
 
 
-const OrderCard = ({ displayImage, name, brand, price, quantity = 1 }) => {
+const CartInfoCard = ({ displayImage, name, brand, price, quantity = 1 }) => {
     const discount = useRef(getRandomDiscount(20, 80));
     let discountPrice = getDiscountedPrice(price, discount.current);
     price *= quantity;
@@ -29,4 +29,4 @@ const OrderCard = ({ displayImage, name, brand, price, quantity = 1 }) => {
     )
 }
 
-export default OrderCard;
+export default CartInfoCard;

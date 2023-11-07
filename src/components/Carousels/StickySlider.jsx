@@ -13,7 +13,6 @@ const StickySlider = ({ images }) => {
     }), [])
 
     const handlePrevClick = () => {
-        // console.log({ elem: verticalSwiperRef.current });
         horizontalSwiperRef.current.swiper?.slidePrev();
     }
     const handleNextClick = () => {
@@ -21,7 +20,7 @@ const StickySlider = ({ images }) => {
     }
 
     return (
-        <div className='flex gap-5 h-[70vh] md:h-[470px] xl:h-[575px] overflow-hidden pb-2'>
+        <div className='flex gap-5 md:h-[470px] xl:h-[575px] overflow-hidden pb-2'>
             <div className="md:w-1/5 hidden md:flex flex-col gap-2">
                 <div onClick={handlePrevClick} className=" cursor-pointer flex items-center justify-center truncate"><SlArrowUp /></div>
                 <swiper-container

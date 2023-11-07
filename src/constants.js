@@ -3,7 +3,7 @@ export const LIMIT_PER_PAGE = 12;
 export const filters = [
     {
         name: 'subCategory', heading: 'Category', options: [
-            'tshirt', 'jeans', 'shorts', 'shirt', 'jogger', 'pyjamas', 'trouser', 'hoodie', 'kurta', 'kurti', 'sweater', 'tracksuit'
+            'tshirt', 'shirt', 'shorts', 'jogger', 'hoodie', 'tracksuit', 'pyjamas', 'trouser', 'jeans', 'kurta', 'kurti', 'sweater', 'jumpsuit'
         ]
     },
     {
@@ -27,7 +27,7 @@ export const filters = [
             'OFFICIAL DISNEY MERCHANDISE',
             'OFFICIAL NARUTO MERCHANDISE',
             'OFFICIAL GARFIELD MERCHANDISE',
-            'OFFICIAL TOM & JERRY MERCHANDISE',
+            'OFFICIAL TOM %26 JERRY MERCHANDISE',
             'OFFICIAL MARVEL MERCHANDISE',
             'OFFICIAL STAR WARS MERCHANDISE',
             'OFFICIAL DC MERCHANDISE',
@@ -54,8 +54,40 @@ export const sortByFilters = filters?.at(-1);
 export const sortByPrice = [
     { name: 'Price : High to Low', value: -1 },
     { name: 'Price : Low to High', value: 1 }
-]
+];
+
+export const bannerItems = [
+    { id: 1, filter: { brand: 'Bewakoof Air® 1.0_Bewakoof®' } },
+    { id: 2, filter: { subCategory: 'hoodie_sweater' } },
+    { id: 3, filter: { brand: 'OFFICIAL NARUTO MERCHANDISE' } },
+    { id: 4, filter: { brand: 'OFFICIAL COCA COLA MERCHANDISE' } }
+];
 
 export const popularSearches = [
-    'tshirt', 'jeans', 'shorts', 'shirt', 'jogger', 'pyjamas', 'trouser', 'hoodie', 'kurta', 'kurti', 'sweater', 'tracksuit'
+    'tshirt', 'shirt', 'shorts', 'jogger', 'hoodie', 'tracksuit', 'pyjamas', 'trouser', 'jeans', 'kurta', 'kurti', 'sweater', 'jumpsuit'
+];
+
+export const addressTypes = ['HOME', "WORK", 'OTHER'];
+
+export const THTBM = [
+    { id: 1, name: 'TRENDY T-SHIRT', filter: { price: 399, subCategory: 'tshirt' } },
+    { id: 2, name: 'NEW ARRIVALS', filter: { subCategory: 'pyjamas', sellerTag: 'new arrival' } },
+    { id: 3, name: 'T-SHIRTS', filter: { subCategory: 'tshirt', sellerTag: 'new arrival' } },
+    { id: 4, name: 'T-SHIRTS', filter: { subCategory: 'tshirt', brand: 'Bewakoof American Pima' } },
+];
+
+export const CTB = [
+    { id: 1, name: 'Shirts', filter: { subCategory: 'shirt', gender: 'Men' } },
+    { id: 2, name: 'Boxers', filter: { subCategory: 'shorts', gender: 'Men' } },
+    { id: 3, name: 'Pyjamas', filter: { subCategory: 'pyjamas', gender: 'Men' } },
+    { id: 4, name: 'Co-ords', filter: { subCategory: 'shirt', gender: 'Women' } },
+    { id: 5, name: 'Pyjamas', filter: { subCategory: 'pyjamas', gender: 'Women' } },
+    { id: 6, name: 'Shorts', filter: { subCategory: 'shorts', gender: 'Women' } }
+];
+
+export const OBP = [
+    { id: 1, name: 'Graphic Print Bags', filter: { subCategory: 'bags' } },
+    { id: 2, name: 'Bewakoof Air® 1.0', filter: { brand: 'Bewakoof Air® 1.0' } },
+    { id: 3, name: 'T-shirts', filter: { subCategory: 'tshirt' } },
+    { id: 4, name: 'Plus Size Store', filter: { size: 'XXL' } }
 ];

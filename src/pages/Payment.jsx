@@ -5,15 +5,12 @@ import PaymentDetailsTabs from "../components/Payment/PaymentsDetailsTabs";
 import Accordion from "../components/Utils/Accordion";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import OrderCard from "../components/Card/OrderCard";
 import AddressCard from "../components/Card/AddressCard";
 import TrustBagge from "../components/Utils/TrustBagge";
-
-
-
+import CartInfoCard from "../components/Card/CartInfoCard";
 
 const Payment = () => {
-    const { user } = useSelector(state => state.auth);
+    const { user, activeAddress } = useSelector(state => state.auth);
     const { totalPrice } = useSelector(state => state.cart);
     const { cartItems } = useSelector(state => state.cart);
 
@@ -31,8 +28,8 @@ const Payment = () => {
     const addressCard = <div className="flex flex-col gap-2">
         <div className="addressType w-full">
             {
-                user?.address?.length > 0 &&
-                <AddressCard {...user.address[0]} />
+                activeAddress &&
+                <AddressCard {...activeAddress} />
             }
         </div>
         <Link to={'/account/address'}>
@@ -43,7 +40,7 @@ const Payment = () => {
     const cartProducts = <div className="flex flex-col gap-4 pb-4">
         {
             cartItems?.map(({ _id, product, quantity }) => (
-                <OrderCard key={_id} quantity={quantity} {...product} />
+                <CartInfoCard key={_id} quantity={quantity} {...product} />
             ))
         }
     </div>
@@ -64,7 +61,7 @@ const Payment = () => {
                 {/* ! right side ! */}
                 <div className="pmt-right md:flex-1 px-4 lg:px-0 lg:pl-4 mb-4 lg:border-l bg-[#f7f7f7] lg:bg-white border-[#d6d6d6]">
                     <div className="border bg-white border-[#d6d6d6] px-4 rounded-md mb-4 hover:shadow-md transition-all">
-                        <Accordion title={'Address'} description={addressCard} />
+                        <Accordion initialExpanded={true} title={'Address'} description={addressCard} />
                     </div>
                     <div className="border bg-white border-[#d6d6d6] px-4 rounded-md mb-4 hover:shadow-md transition-all">
                         <Accordion title={'You are paying for these items'} description={cartProducts} />

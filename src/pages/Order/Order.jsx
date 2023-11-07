@@ -8,7 +8,7 @@ import OrdersCard from "../../components/Card/OrdersCard";
 
 
 const Order = () => {
-    const { loading, orderItems, isAlreadyFetchedOrder } = useSelector(state => state.order);
+    const { orderItems, isAlreadyFetchedOrder } = useSelector(state => state.order);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -16,8 +16,6 @@ const Order = () => {
             dispatch(getOrder());
         }
     }, []);
-
-    console.log(orderItems);
 
     return (
         <div className="bg-[#f9f9f9]">
@@ -41,7 +39,7 @@ const Order = () => {
                     orderItems?.length > 0
                         ? <div className="px-4 md:px-10 flex flex-col gap-4">
                             {
-                                orderItems?.map(({ createdAt, order }) => {
+                                orderItems?.slice(0)?.reverse()?.map(({ createdAt, order }) => {
                                     if (order === null) return <Fragment key={createdAt} />;
                                     return (
                                         <Fragment key={createdAt}>

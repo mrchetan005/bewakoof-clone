@@ -6,7 +6,7 @@ import cartReducer from './slices/cartSlice';
 import wishlistReducer from './slices/wishlistSlice';
 import filterReducer from './slices/filterSlice';
 import orderReducer from './slices/orderSlice';
-
+import searchReducer from './slices/searchSlice';
 
 const store = configureStore({
     reducer: {
@@ -16,6 +16,7 @@ const store = configureStore({
         wishlist: wishlistReducer,
         order: orderReducer,
         filter: filterReducer,
+        search: searchReducer
     }
 });
 

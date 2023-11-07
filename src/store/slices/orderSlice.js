@@ -9,18 +9,21 @@ const initialState = {
     message: '',
     loading: false,
     error: null,
+    status: 'idle'
 }
 
 const orderSlice = createSlice({
     name: 'order',
     initialState,
     reducers: {
-
+        resetStatus(state) {
+            state.status = 'idle';
+        }
     },
     extraReducers
 });
 
 
-// export const {  } = orderSlice.actions;
+export const { resetStatus } = orderSlice.actions;
 
 export default orderSlice.reducer;

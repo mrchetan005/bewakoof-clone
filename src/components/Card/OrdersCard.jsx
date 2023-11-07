@@ -3,8 +3,8 @@
 import { useNavigate } from "react-router-dom";
 
 
-const OrdersCard = ({ orderId, _id, displayImage, name, createdAt }) => {
-    const date = new Date(new Date() * 1 + (1000 * 60 * 60 * 24 * (Math.ceil(Math.random() * 10))));
+const OrdersCard = ({ orderId, displayImage, name, createdAt }) => {
+    const date = new Date(createdAt);
     const dateArray = date.toString().split(' ').slice(1, 4);
     const day = dateArray[1];
     const month = dateArray[0];
@@ -13,17 +13,17 @@ const OrdersCard = ({ orderId, _id, displayImage, name, createdAt }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`order-info/${orderId}`)
+        navigate(`./${orderId}`);
     }
 
     return (
         <div className="">
-            <div className="orderId font-medium">Order# <span className="font-bold ml-1">{_id.slice(0, 6)}</span></div>
-            <div className="orderCard border-2 flex gap-6 bg-white rounded overflow-hidden">
-                <figure className="h-[260px] w-[260px]">
-                    <img className="object-cover h-full w-full" src={displayImage} alt={name} />
+            <div className="orderId font-medium">Order# <span className="font-bold ml-1">{orderId.slice(-6)}</span></div>
+            <div className="orderCard border-2 flex md:gap-6 p-2 md:p-0 bg-white rounded overflow-hidden">
+                <figure className="md:h-[260px] md:w-[260px] w-[121px] h-[151px] rounded md:rounded-none">
+                    <img className="object-cover h-full rounded md:rounded-none" src={displayImage} alt={name} />
                 </figure>
-                <div className="text-sm p-1 md:p-4 w-full flex flex-col gap-6">
+                <div className="text-xs flex-1 md:text-sm px-2 md:p-4 flex flex-col gap-4 md:gap-6">
                     <div>
                         <h3 className="font-semibold">{name}</h3>
                         <p className="text-sm font-medium py-1">Size: S</p>
@@ -34,7 +34,7 @@ const OrdersCard = ({ orderId, _id, displayImage, name, createdAt }) => {
                     </div>
                     <div className="text-xs font-medium w-max text-[#42a2a2] p-1 bg-[#e7ffeb]">CONFIRMED</div>
                     <div className="ml-auto w-max">
-                        <button onClick={handleClick} className="border font-bold hover:opacity-80 rounded border-[#42a2a2] text-[#42a2a2] py-4 px-10 text-sm">ORDER INFO</button>
+                        <button onClick={handleClick} className="border font-bold hover:opacity-80 rounded border-[#42a2a2] text-[#42a2a2] py-2 px-3 md:py-4 md:px-10 text-sm">ORDER INFO</button>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,6 @@ const Reviews = ({ reviews }) => {
     const { state } = useLocation();
 
     const reviewData = reviews ? reviews : state;
-    console.log('reviews rendered');
 
     return (
         <div className='reviewsWrapper md:container px-4 md:px-0'>

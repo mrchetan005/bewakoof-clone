@@ -18,6 +18,12 @@ export const getFilteredProduct = async ({ params }) => {
     return data?.data?.data;
 }
 
+export const getOrderDetails = async ({ params }) => {
+    const data = await api.get(`/ecommerce/order/${params?.orderId}`);
+    // console.log(data?.data?.data);
+    return data?.data?.data;
+}
+
 export const getReviews = async ({ params }) => {
     // console.log(params);
     const data = await api.get(`/ecommerce/review/${params?.id}`);

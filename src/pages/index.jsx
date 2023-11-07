@@ -9,6 +9,7 @@ export { default as ProductDetails } from './ProductDetails';
 export { default as Cart } from './Cart';
 export { default as Order } from './Order/Order';
 export { default as OrderSuccess } from './Order/OrderSuccess';
+export { default as OrderDetails } from './Order/OrderDetails';
 export { default as Wishlist } from './Wishlist';
 export { default as Search } from './Search';
 export { default as PageNotFound } from './PageNotFound';

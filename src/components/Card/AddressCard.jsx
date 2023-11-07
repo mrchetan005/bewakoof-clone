@@ -3,6 +3,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { updateInfo } from "../../store/asyncThunks/authAsyncThunk";
 import { Link, useNavigate } from "react-router-dom";
+import { addActiveAddress } from "../../store/slices/authSlice";
 
 
 const AddressCard = ({ _id, street, city, state, zipCode, activeAddress, setActiveAddress }) => {
@@ -20,6 +21,7 @@ const AddressCard = ({ _id, street, city, state, zipCode, activeAddress, setActi
     }
 
     const handleConfirm = () => {
+        dispatch(addActiveAddress(_id));
         navigate(-1);
     }
 
@@ -32,20 +34,20 @@ const AddressCard = ({ _id, street, city, state, zipCode, activeAddress, setActi
                 <div className="flex flex-col justify-center items-center w-full">
                     <div className="panelBody p-5 w-full">
                         <h3 className="addressName text-[#333] text-sm font-semibold">{user?.name}</h3>
-                        <div className="textGrayed mt-1 text-xs text-[#000c] font-medium">
-                            <div className="addressClamp mb-5">{street}</div>
+                        <div className="textGrayed my-4 text-xs text-black  font-medium">
+                            <div className="addressClamp mb-1">{street}</div>
                             <div>{city}, {state} {zipCode}</div>
                         </div>
-                        {user?.phone && <p className="mt-2 font-medium">Mobile: {user?.phone} </p>}
+                        {user?.phone && <p className="mt-2 text-black font-medium">Mobile: <span className="font-bold">{user?.phone}</span> </p>}
                     </div>
                     {
                         activeAddress === _id &&
                         <div className="pannelBottom self-start p-5 pt-0 w-full">
-                            <div className="text-[#51cccc] font-bold text-sm flex items-center sm:ml-auto w-max">
+                            <div className="text-[#42a2a2] font-bold text-xs flex items-center sm:ml-auto w-max">
                                 <Link to={`/account/address/${_id}`}>
-                                    <span className="pr-4 border-r-2">Edit</span>
+                                    <span className="pr-4 border-r-2">EDIT</span>
                                 </Link>
-                                <span onClick={() => handleRemove(_id)} className="px-4">Remove</span>
+                                <span onClick={() => handleRemove(_id)} className="px-4">REMOVE</span>
                             </div>
                             <div className="mt-4">
                                 <button onClick={handleConfirm} className="py-4 w-full bg-[#42a2a2] text-white max-w-[300px] text-base font-semibold rounded-md">CONFIRM</button>

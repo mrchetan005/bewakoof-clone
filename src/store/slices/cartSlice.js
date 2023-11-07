@@ -18,15 +18,12 @@ const cartSlice = createSlice({
     reducers: {
         checkItemIsAddedToCart(state, { payload }) {
             state.isAddedToCart = state.cartItems?.some(({ product }) => product._id === payload);
-        },
-        updateTotalPrice(state, { payload }) {
-            state.totalPrice += payload;
         }
     },
     extraReducers
 });
 
 
-export const { checkItemIsAddedToCart, updateTotalPrice } = cartSlice.actions;
+export const { checkItemIsAddedToCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

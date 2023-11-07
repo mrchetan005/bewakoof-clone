@@ -1,45 +1,49 @@
 
 import { useEffect, useState } from 'react';
-import useApi from '../../Hooks/useApi';
 import SortByDropdown from './SortByDropdown';
 import Filters from './Filters';
 import ProductsGrid from './ProductsGrid';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { LIMIT_PER_PAGE } from '../../constants';
-import { useSelector } from 'react-redux';
-import { checkEqual } from '../../Utils/CommonFunctions';
+import { useDispatch, useSelector } from 'react-redux';
 import MobileFilter from './MobileFilter';
+import { clearAllFilters, clearProducts, setFilterFromParams, setPreviousFilterUrl } from '../../store/slices/filterSlice';
+import { getFilteredProducts } from '../../store/asyncThunks/filterAsyncThunk';
 
 const CategoryWrapper = () => {
-    const [previousFilter, setPreviousFilter] = useState({});
-    const [moreData, setMoreData] = useState([]);
     const [page, setPage] = useState(1);
     const { pathname } = useLocation();
-    const { data, loading, get } = useApi([]);
+    const [searchParams] = useSearchParams();
+
+    const pathnameArray = pathname.split('/');
+    const heading = pathnameArray[1] === 'c' || pathnameArray[1] === 'search' ? decodeURI(pathnameArray[2]) : decodeURI(pathnameArray[1]);
 
     const { isIntersecting } = useSelector(state => state.intersection);
-    let { filter, sort } = useSelector(state => state.filter);
+    let { products, filter, sort, previousFilterUrl } = useSelector(state => state.filter);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (moreData?.length > (LIMIT_PER_PAGE * page) - 1) {
+        if (products?.length > (LIMIT_PER_PAGE * page) - 1) {
             setPage(prev => prev + 1);
         }
-    }, [isIntersecting])
+    }, [isIntersecting]);
 
     const fetchData = (page) => {
-        const flag = checkEqual(previousFilter, filter);
-        if (!flag) {
+        if (pathnameArray[1].toLowerCase().includes('men')) {
             filter = { ...filter, gender: pathname.split('/')[1] };
-            let url = `/ecommerce/clothes/products?filter=${JSON.stringify(filter)}&page=${page}&limit=${LIMIT_PER_PAGE}`;
-            if (sort !== 0) {
-                url += `&sort={"price":${sort}}`;
-            }
-            get(url);
-            setPreviousFilter(filter);
+        }
+
+        let url = `/ecommerce/clothes/products?${pathnameArray[1] === 'search' ? 'search' : 'filter'}=${JSON.stringify(filter)}&page=${page}&limit=${LIMIT_PER_PAGE}`;
+
+        if (sort !== 0) {
+            url += `&sort={"price":${sort}}`;
+        }
+        const flag = url === previousFilterUrl;
+        if (!flag) {
+            dispatch(setPreviousFilterUrl(url));
+            dispatch(getFilteredProducts({ url }));
         }
     }
-
-    console.log('filter', filter);
 
     useEffect(() => {
         if (page !== 1) {
@@ -49,30 +53,33 @@ const CategoryWrapper = () => {
 
     useEffect(() => {
         setPage(1);
-        setMoreData([]);
         fetchData(1);
-        window.scrollTo({
-            top: 0,
-        })
-    }, [filter, sort, pathname]);
+        dispatch(clearProducts());
+    }, [filter, sort]);
 
     useEffect(() => {
-        if (data?.data) {
-            if (page === 1) {
-                setMoreData([...data.data]);
+        const filterFromParams = {};
+        searchParams.forEach((value, key) => {
+            if (key === 'name') {
+                filterFromParams[key] = value;
             } else {
-                setMoreData(prev => [...prev, ...data.data]);
+                filterFromParams[key] = value.split('_');
             }
+        });
+        if (Object.keys(filterFromParams).length > 0) {
+            dispatch(setFilterFromParams(filterFromParams));
+        } else {
+            dispatch(clearAllFilters());
         }
-    }, [data]);
+    }, [pathname]);
 
     return (
         <>
             <div className="lg:container">
                 <div className="headingInner sticky top-14 md:relative md:top-0 bg-white z-10 pt-5 w-full md:mt-11 px-4 md:px-0">
                     <div className='m-auto md:m-0 w-max'>
-                        <h1 className="searchResult capitalize float-left text-2xl font-bold truncate text-[#2d2d2d]">{pathname.split('/')[1].split('-').join(' ')}</h1>
-                        <span className="totalProductCount text-2xl pl-2 text-[#949494]">({moreData?.length})</span>
+                        <h1 className="searchResult capitalize float-left text-2xl font-bold truncate text-[#2d2d2d]">{heading}</h1>
+                        <span className="totalProductCount text-2xl pl-2 text-[#949494]">({products?.length})</span>
                         <div className=" left-0 w-7/12 h-[2px] bg-[#fbd139] mt-[6px] ml-[2px]"></div>
                     </div>
                 </div>
@@ -85,11 +92,13 @@ const CategoryWrapper = () => {
                         <div className="sortByWrapper hidden md:block mr-4 w-max float-right">
                             <SortByDropdown />
                         </div>
-                        <ProductsGrid products={moreData} loadingProducts={loading} />
+                        <ProductsGrid />
                     </div>
                 </div>
             </div>
-            <MobileFilter />
+            <div className='md:hidden'>
+                <MobileFilter />
+            </div>
         </>
     )
 }

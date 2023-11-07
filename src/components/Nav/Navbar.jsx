@@ -1,17 +1,21 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineHeart, AiOutlineMobile, AiOutlineSearch } from 'react-icons/ai';
 import { BsBag } from 'react-icons/bs';
 import MenuWrapper from "./MenuWrapper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropDownMenu from "./DropDownMenu";
-import { MenCategories, WomenCategories, mobileCoversCategories, mobileOtherBrands, myProfile, specialsCategories } from "./navlinks";
+import { MenCategories, WomenCategories, bottomHeaderLinks, mobileCoversCategories, mobileOtherBrands, myProfile, specialsCategories } from "./navlinks";
 import { RiMenu2Line } from 'react-icons/ri';
 import DropDownProfile from "./DropDownProfile";
 import Badge from "../Utils/Badge";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { includePath } from "../../Utils/CommonFunctions";
 import Portal from "../Portal";
 import Sidebar from "./Sidebar";
+import { setSearchValue } from "../../store/slices/searchSlice";
+import { searchItems } from "../../store/asyncThunks/searchAsyncThunk";
+import SuggestionList from "../SearchEssentials/SuggestionList";
+
 const paths = ['login', 'signup', 'cart', 'write-review', 'profile', 'search'];
 
 
@@ -19,14 +23,33 @@ const Navbar = () => {
     const [isOpenSidebar, setIsOpenSidebar] = useState(false);
     const [activeMenuDropdown, setActiveMenuDropdown] = useState('');
     const [activeProfileDropdown, setActiveProfileDropdown] = useState('');
-    const [searchValue, setSearchValue] = useState('');
     const { pathname } = useLocation();
     const { results: cartCount } = useSelector(state => state.cart);
+    const { searchValue } = useSelector(state => state.search);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const handleSearchValueChange = (e) => setSearchValue(e.target.value);
+    const handleSearchValueChange = (e) => {
+        const { value } = e.target;
+        dispatch(setSearchValue(value));
+    };
+
     const handleSubmitSearch = (e) => {
-        e.preventDefault();
+        e?.preventDefault && e.preventDefault();
+        navigate(`/search/Search Results for "${searchValue}"?name=${searchValue}`);
+        dispatch(setSearchValue(''));
     }
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (searchValue.length > 2) {
+                dispatch(searchItems(searchValue));
+            }
+        }, 500);
+        return () => {
+            clearTimeout(timeoutId);
+        }
+    }, [searchValue]);
 
     const openSidebar = (e) => {
         if (e.stopProgation) e.stopProgation();
@@ -39,7 +62,6 @@ const Navbar = () => {
         document.body.style.overflowY = '';
         setIsOpenSidebar(false);
     }
-
 
     return (
         <>
@@ -90,11 +112,17 @@ const Navbar = () => {
                             <Link to={'/search'}>
                                 <AiOutlineSearch className="lg:hidden w-7 h-7 mx-2 cursor-pointer" />
                             </Link>
-                            <div className="searchBox hidden lg:block flex-1 float-right">
+                            <div className="searchBox relative hidden lg:block flex-1 float-right">
                                 <form onSubmit={handleSubmitSearch} className="relative focus-within:border-[#0000005a] border border-transparent bg-[#eaeaea] transition-all duration-300  rounded-[5px] focus-within:bg-white h-10 py-1 pl-10 w-full text-sx">
                                     <input value={searchValue} onChange={handleSearchValueChange} autoComplete="off" placeholder="Search by product, category or collection" type="text" className="text-xs font-medium bg-transparent placeholder:text-[8px] w-full h-full border-none outline-none" />
-                                    <AiOutlineSearch className="h-6 w-6 text-[#0000006e] absolute left-2 top-2" />
+                                    <AiOutlineSearch className="h-6 w-6 text-[#0000006e] absolute left-2 top-2 z-50" />
                                 </form>
+                                {
+                                    searchValue.length > 2 &&
+                                    <div className="absolute left-0 right-0 top-full bg-white border border-t-0 mt-2">
+                                        <SuggestionList />
+                                    </div>
+                                }
                             </div>
                             <div className="divider border border-[rgba(0,0,0,0.3)] hidden lg:block my-1 ml-4 h-6" />
 
@@ -117,21 +145,19 @@ const Navbar = () => {
                 <div className="bottomHeaderWrapper fixed bg-white top-[83px] z-20 hidden lg:block overflow-hidden">
                     <div className="bottomHeader">
                         <ul className="flex w-screen h-14 items-center justify-evenly ">
-                            <li><Link className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">MEN</Link></li>
-                            <li><Link className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">WOMEN</Link></li>
-                            <li><Link className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">ACCESSORIES</Link></li>
-                            <li><Link className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">LIVE NOW</Link></li>
-                            <li><Link className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">AMERICAN PIMA</Link></li>
-                            <li><Link className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">BEWAKOOF AIR</Link></li>
-                            <li><Link className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">OFFICIAL MERCH</Link></li>
-                            <li><Link className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">PLUS SIZE</Link></li>
+                            {
+                                bottomHeaderLinks?.map(({ id, name, filter }) => (
+                                    <li key={id}>
+                                        <Link to={`/c/${name}?${createSearchParams(filter)}`} className="font-medium  text-base w-max whitespace-nowrap  uppercase text-[#0e0e0e] py-5 px-6">{name}</Link>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </div>
                 </div>
             }
 
             {
-
                 !includePath(pathname, paths) &&
                 <div className="footerMenuWrapper fixed bottom-0 left-0 right-0 drop-shadow-2xl py-2 bg-white flex justify-evenly z-50 lg:hidden" >
                     <NavLink to={'/'} className="bottomNavTab flex flex-col justify-center">
@@ -140,7 +166,7 @@ const Navbar = () => {
                         <span className="text-xs w-10 text-center">Home</span>
                     </NavLink>
 
-                    <NavLink to={'/categories'} className="bottomNavTab flex flex-col justify-center">
+                    <NavLink to={'/Men'} className="bottomNavTab flex flex-col justify-center">
                         <img className="h-6 w-6 m-auto nav-icon" src="/assets/icons/categories-logo.svg" alt="Categories" />
                         <img className=" h-6 w-6 m-auto nav-icon-active hidden" src="/assets/icons/categories-logo-active.svg" alt="Categories" />
                         <span className="text-xs w-[66px] text-center">Categories</span>

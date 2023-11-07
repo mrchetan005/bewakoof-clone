@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, createSearchParams } from "react-router-dom";
 import { BannerCarousel, ProductSlider, WidgetSlider } from "../components/Carousels";
 import ExclusiveGoofCorner from "../components/HomepageEssentials/ExclusiveGoofCorner";
 
+import { CTB, OBP, THTBM, filters } from "../constants";
 
 const Home = () => {
     return (
@@ -28,16 +29,16 @@ const Home = () => {
                 <div className="grid grid-cols-2 gap-4 md:gap-0 md:grid-cols-6">
                     {
                         new Array(6).fill('').map((_, i) => (
-                            <figure key={i}>
+                            <Link to={`/Men?${createSearchParams({ subCategory: filters[0].options[i] })}`} key={i}>
                                 <img className="object-cover rounded-xl md:rounded-none" src={`/assets/images/categories/m${i + 1}.jpg`} alt="category" />
-                            </figure>
+                            </Link>
                         ))
                     }
                     {
                         new Array(6).fill('').map((_, i) => (
-                            <figure key={i}>
+                            <Link to={`/Women?${createSearchParams({ subCategory: filters[0].options[i] })}`} key={i}>
                                 <img className="object-cover rounded-xl md:rounded-none" src={`/assets/images/categories/w${i + 1}.jpg`} alt="category" />
-                            </figure>
+                            </Link>
                         ))
                     }
                 </div>
@@ -47,9 +48,9 @@ const Home = () => {
                 <h2 className="font-bold text-xs md:text-xl md:text-center pt-4 pb-2">TOO HOT TO BE MISSED</h2>
                 <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-2">
                     {
-                        new Array(4).fill('').map((_, i) => (
-                            <Link key={i}>
-                                <img className="w-full object-cover rounded-xl md:rounded-none" src={`/assets/images/others/THTBM${i + 1}.jpg`} alt="category" />
+                        THTBM?.map(({ id, name, filter }) => (
+                            <Link to={`/c/${name}?${createSearchParams(filter)}`} key={id}>
+                                <img className="w-full object-cover rounded-xl md:rounded-none" src={`/assets/images/others/THTBM${id}.jpg`} alt="category" />
                             </Link>
                         ))
                     }
@@ -60,9 +61,9 @@ const Home = () => {
                 <h2 className="font-bold text-xs md:text-xl md:text-center pt-4">CATEGORIES TO BAG</h2>
                 <div className="grid gap-2 grid-cols-2 md:gap-0 md:grid-cols-6">
                     {
-                        new Array(6).fill('').map((_, i) => (
-                            <Link key={i}>
-                                <img className="w-full object-cover rounded-xl" src={`/assets/images/categories/CTB${i + 1}.jpg`} alt="category" />
+                        CTB?.map(({ id, name, filter }) => (
+                            <Link to={`/c/${name}?${createSearchParams(filter)}`} key={id}>
+                                <img className="w-full object-cover rounded-xl" src={`/assets/images/categories/CTB${id}.jpg`} alt="category" />
                             </Link>
                         ))
                     }
@@ -73,8 +74,8 @@ const Home = () => {
                 <h2 className="font-bold text-xs md:text-xl md:text-center pt-4">TOP ACCESSORIES</h2>
                 <div className="grid gap-2 grid-cols-2 md:gap-0 md:grid-cols-4 lg:container m-auto">
                     {
-                        new Array(4).fill('').map((_, i) => (
-                            <Link key={i}>
+                        ['Mobile Covers', 'Sliders', 'Backpacks', 'Caps'].map((name, i) => (
+                            <Link to={`/c/${name}?${createSearchParams({ subCategory: name })}`} key={i}>
                                 <img className="w-full object-cover rounded-xl md:rounded-none" src={`/assets/images/categories/a${i + 1}.jpg`} alt="category" />
                             </Link>
                         ))
@@ -93,9 +94,9 @@ const Home = () => {
                 <h2 className="font-bold text-xs md:text-xl text-center py-4">OUR BEST PICKS</h2>
                 <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-2">
                     {
-                        new Array(4).fill('').map((_, i) => (
-                            <Link key={i}>
-                                <img className="w-full object-cover rounded-xl md:rounded-none" src={`/assets/images/others/OBP${i + 1}.jpg`} alt="category" />
+                        OBP.map(({ id, name, filter }) => (
+                            <Link to={`/c/${name}?${createSearchParams(filter)}`} key={id}>
+                                <img className="w-full object-cover rounded-xl md:rounded-none" src={`/assets/images/others/OBP${id}.jpg`} alt="category" />
                             </Link>
                         ))
                     }

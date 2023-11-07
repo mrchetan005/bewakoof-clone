@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { extraReducers } from '../asyncThunks/authAsyncThunk';
+import { extraReducers } from '../asyncThunks/filterAsyncThunk';
 
 const initialState = {
-    filter: {
-        sellerTag: 'top rated'
-    },
+    products: [],
+    filter: {},
     sort: 0,
-    previousFilter: {},
+    previousFilterUrl: '',
     clearedFilters: true,
+    loading: false,
+    error: null
 };
 
 const filterSlice = createSlice({
@@ -56,11 +57,21 @@ const filterSlice = createSlice({
 
             state.clearedFilters = false;
         },
-        setAllFilters(state, { payload }) {
+        setPreviousFilterUrl(state, { payload }) {
+            state.previousFilterUrl = payload;
+        },
+        setFilterFromParams(state, { payload }) {
             console.log('payload', payload);
-            state.previousFilter = state.filter;
-            state.clearedFilters = false;
-            state.filter = { ...payload };
+            if (payload?.sort) {
+                const { sort, ...remainingFilters } = payload;
+                state.sort = sort.join('');
+                state.filter = { ...remainingFilters };
+            } else {
+                state.filter = { ...payload };
+            }
+        },
+        setProducts(state, { payload }) {
+            state.products = [...state.products, ...payload];
         },
         sortProducts(state, { payload }) {
             state.sort = payload;
@@ -68,11 +79,35 @@ const filterSlice = createSlice({
         },
         clearAllFilters() {
             return initialState;
+        },
+        clearProducts(state) {
+            state.products = [];
         }
     },
     extraReducers,
 });
 
-export const { setFilters, setAllFilters, clearAllFilters, sortProducts } = filterSlice.actions;
+export const { setFilters, clearAllFilters, sortProducts, setPreviousFilterUrl, setFilterFromParams, setProducts, clearProducts } = filterSlice.actions;
 
 export default filterSlice.reducer;
+
+
+// useEffect(() => {
+//     const gender = searchParams.get('gender');
+//     const subCategory = searchParams.get('category');
+//     const color = searchParams.get('color');
+//     const size = searchParams.get('size');
+//     const brand = searchParams.get('brand');
+//     const sellerTag = searchParams.get('sellerTag');
+//     const sort = searchParams.get('sort');
+//     if (gender) filterRef.current.gender = gender;
+//     if (sellerTag) filterRef.current.sellerTag = sellerTag;
+
+//     if (subCategory) filterRef.current.subCategory = subCategory.split('_');
+//     if (color) filterRef.current.color = color.split('_');
+//     if (size) filterRef.current.size = size.split('_');
+//     if (brand) filterRef.current.brand = brand.split('_');
+
+//     setFilter(filterRef.current);
+
+// }, [searchParams]);

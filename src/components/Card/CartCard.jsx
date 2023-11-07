@@ -7,15 +7,14 @@ import { getDiscountedPrice, getRandomDiscount } from '../../Utils/CommonFunctio
 import { useEffect, useRef, useState } from "react";
 import { checkItemIsAdded } from "../../Utils/CommonFunctions";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart } from "../../store/asyncThunks/cartAsyncThunk";
+import { addToCart, removeFromCart } from "../../store/asyncThunks/cartAsyncThunk";
 import { addToWishlist } from "../../store/asyncThunks/wishlistAsyncThunk";
 import { AiOutlineClose } from "react-icons/ai";
-import { updateTotalPrice } from "../../store/slices/cartSlice";
 
 const sizes = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
-const quantity = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const quantities = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const CartCard = ({ _id, brand, displayImage, name, price }) => {
+const CartCard = ({ _id, brand, displayImage, name, price, quantity }) => {
     const [qty, setQty] = useState(1);
     const [wishlisted, setWishlisted] = useState(false);
     const dispatch = useDispatch();
@@ -25,9 +24,10 @@ const CartCard = ({ _id, brand, displayImage, name, price }) => {
     price *= qty;
     discountPrice *= qty;
 
-    const handleQty = (qtt) => {
-        setQty(qtt);
-        dispatch(updateTotalPrice(qtt * price));
+    const handleQty = (qtyToSet) => {
+        setQty(qtyToSet);
+        const resQty = qtyToSet - quantity;
+        dispatch(addToCart({ productId: _id, quantity: resQty }));
     }
 
     const { wishlistItems } = useSelector(state => state.wishlist);
@@ -64,7 +64,7 @@ const CartCard = ({ _id, brand, displayImage, name, price }) => {
                         <div className="cartProdInfoMsg block text-xs md:text-sm text-[#1d8802] font-medium pt-1 pb-3">You saved ₹{discountPrice - price}!</div>
                         <div className="cartModOptionWrap flex gap-5 py-2">
                             <CartModOptions options={sizes} title={'Size'} heading={'Select Size'} />
-                            <CartModOptions handleQty={handleQty} options={quantity} title={'Qty'} heading={'Select Quantity'} />
+                            <CartModOptions initialQuantity={quantity} handleQty={handleQty} options={quantities} title={'Qty'} heading={'Select Quantity'} />
                         </div>
                         {/* <div className="cartProdInfoMsg text-sm text-[#db3a34] font-medium">Hurry! Only 18 left!</div> */}
                     </div>

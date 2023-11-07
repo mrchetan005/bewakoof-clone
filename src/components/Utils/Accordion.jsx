@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
-const Accordion = ({ icon, title, subTitle, description }) => {
-    const [expanded, setExpanded] = useState(false);
+const Accordion = ({ icon, title, subTitle, description, initialExpanded = false }) => {
+    const [expanded, setExpanded] = useState(initialExpanded);
 
     const toggleExpanded = () => setExpanded(!expanded);
 

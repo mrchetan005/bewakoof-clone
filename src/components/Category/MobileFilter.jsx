@@ -5,23 +5,22 @@ import { AiOutlineClose } from "react-icons/ai";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import { filters, sortByFilters, sortByPrice } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllFilters, setFilters, sortProducts } from "../../store/slices/filterSlice";
+import { clearAllFilters, setFilters, sortProducts } from "../../store/slices/filterSlice";
 
 
 const MobileFilter = () => {
     const [selectedSortBy, setSelectedSortBy] = useState(sortByFilters.options[0]);
-    const [selectedFilterBy, setSelectedFilterBy] = useState({});
     const [toggleFilter, setToggleFilter] = useState(false);
     const [toggleSort, setToggleSort] = useState(false);
-    const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(setAllFilters(selectedFilterBy));
-    }, [selectedFilterBy]);
+    const { filter } = useSelector(state => state.filter);
 
-    const filterArray = Object.keys(selectedFilterBy);
-    const index = filterArray.findIndex(key => key === 'subCategory');
+    const filterArray = Object.keys(filter);
+    let index = filterArray.findIndex(key => key === 'subCategory');
     if (index !== -1) filterArray.splice(index, 1, 'category');
+
+    index = filterArray.findIndex(key => key === 'sellerTag');
+    if (index !== -1) filterArray.splice(index, 1);
 
     const filterString = filterArray?.length === 0 ? 'None' : filterArray?.slice(0, 2)?.join(', ') + (filterArray?.length > 2 ? ', +' + filterArray?.slice(2)?.length : '');
 
@@ -76,7 +75,7 @@ const MobileFilter = () => {
                 {
                     toggleFilter &&
                     <Portal onClose={closeFilterBy}>
-                        <FilterBy onClose={closeFilterBy} selectedFilterBy={selectedFilterBy} setSelectedFilterBy={setSelectedFilterBy} />
+                        <FilterBy onClose={closeFilterBy} />
                     </Portal>
                 }
             </div>
@@ -86,7 +85,7 @@ const MobileFilter = () => {
 
 export default memo(MobileFilter);
 
-const SortBy = ({ onClose, selectedSortBy, setSelectedSortBy }) => {
+const SortBy = (({ onClose, selectedSortBy, setSelectedSortBy }) => {
 
     const handleClose = (e) => {
         e?.stopPropagation && e.stopPropagation();
@@ -139,10 +138,9 @@ const SortBy = ({ onClose, selectedSortBy, setSelectedSortBy }) => {
             </div>
         </div>
     )
-}
+})
 
-const FilterBy = ({ selectedFilterBy, setSelectedFilterBy, onClose }) => {
-    const [filter, setFilter] = useState(selectedFilterBy);
+const FilterBy = ({ onClose }) => {
     const [expanded, setExpanded] = useState(0);
 
     const handleClose = (e) => {
@@ -152,38 +150,14 @@ const FilterBy = ({ selectedFilterBy, setSelectedFilterBy, onClose }) => {
         }
     }
 
-    const name = filters[expanded].name;
-
-    const handleFilterClick = (value) => {
-        setFilter(prev => {
-            if (!prev[name]) prev[name] = [];
-            const index = prev?.[name]?.findIndex(val => val === value);
-            if (index === -1) {
-                prev[name] = [...prev[name], value];
-            } else {
-                if (prev[name].length === 1) {
-                    delete prev[name];
-                } else {
-                    prev[name].splice(index, 1);
-                }
-            }
-            return { ...prev };
-        })
-    }
     const dispatch = useDispatch();
 
     const handleApply = (e) => {
-        // if (Object.keys.length === 0) {
-        //     dispatch(clearAllFilters());
-        // }
-        setSelectedFilterBy(filter);
         onClose(e);
     }
 
-    console.log(filter);
-
     const handleClearAll = () => {
-        setFilter({});
+        dispatch(clearAllFilters());
     }
 
 
@@ -205,10 +179,7 @@ const FilterBy = ({ selectedFilterBy, setSelectedFilterBy, onClose }) => {
                     <ul className="h-[700px] overflow-y-auto flex-[2]">
                         {
                             filters[expanded]?.options?.map((value) => (
-                                <li onClick={() => handleFilterClick(value)} key={value} className={`cursor-pointer capitalize p-4 text-sm flex items-center gap-3`}>
-                                    <div className={`inline-block border  ${filter[name]?.includes(value) ? 'bg-[#42a2a2] border-[#42a2a2]' : 'border-[#0000008a]'} `}><IoCheckmarkSharp className={`text-white`} /></div>
-                                    {value}
-                                </li>
+                                <CategoryAccordionMobile key={value} name={filters[expanded].name} value={value} />
                             ))
                         }
                     </ul>
@@ -219,5 +190,22 @@ const FilterBy = ({ selectedFilterBy, setSelectedFilterBy, onClose }) => {
                 <div onClick={handleApply} className="flex-1 px-4 py-3 cursor-pointer bg-[#42a2a2] text-white ">APPLY</div>
             </div>
         </div>
+    )
+}
+
+const CategoryAccordionMobile = ({ name, value }) => {
+    const { filter } = useSelector(state => state.filter);
+    const dispatch = useDispatch();
+
+    const handleFilterClick = (value) => {
+        dispatch(setFilters({ name, value }));
+    }
+
+
+    return (
+        <li onClick={() => handleFilterClick(value)} className={`cursor-pointer capitalize p-4 text-sm flex items-center gap-3`}>
+            <div className={`inline-block border  ${filter[name]?.includes(value) ? 'bg-[#42a2a2] border-[#42a2a2]' : 'border-[#0000008a]'} `}><IoCheckmarkSharp className={`text-white`} /></div>
+            {value}
+        </li>
     )
 }

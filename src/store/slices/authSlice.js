@@ -11,7 +11,8 @@ const initialState = {
     },
     authenticated: false,
     loading: false,
-    error: null
+    error: null,
+    activeAddress: null
 };
 
 const authSlice = createSlice({
@@ -33,6 +34,13 @@ const authSlice = createSlice({
             window.localStorage.removeItem('user_bewkoof');
             return initialState;
         },
+        addActiveAddress(state, { payload }) {
+            if (payload) {
+                state.activeAddress = state.user?.address?.find(address => address._id === payload);
+            } else {
+                state.activeAddress = state.user?.address?.[0];
+            }
+        },
         resetStatus(state) {
             state.status = 'idle'
         }
@@ -40,6 +48,6 @@ const authSlice = createSlice({
     extraReducers,
 });
 
-export const { isUserLoggedIn, logOutUser, resetStatus } = authSlice.actions;
+export const { isUserLoggedIn, logOutUser, addActiveAddress, resetStatus } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import CartCard from "../components/Card/CartCard";
 import { ProductSlider } from "../components/Carousels";
 import { Link, useNavigate } from "react-router-dom";
-import Divider from "../components/Utils/Divider";
 import TrustBagge from "../components/Utils/TrustBagge";
 
 const Cart = () => {
@@ -39,7 +38,7 @@ const Cart = () => {
                                         {
                                             cartItems?.length > 0 &&
                                             cartItems?.slice(0)?.reverse()?.map((item) => (
-                                                <CartCard key={item._id} {...item?.product} />
+                                                <CartCard key={item._id} {...item?.product} quantity={item?.quantity} />
                                             ))
                                         }
                                     </div>
@@ -148,7 +147,6 @@ const EmptyCart = () => {
                     <button onClick={handleClick} className={`cursor-pointer h-10 w-52 my-5 m-auto font-medium outline-none flex justify-center items-center rounded-md border-[#51cccc] border-2 text-lg text-[#51cccc] hover:bg-opacity-80`}>Continue Shopping</button>
                 </div>
             </div>
-            <Divider h={2} />
             <div className="pb-8 pt-3 pl-4 md:px-10 h-full w-full bg-no-repeat bg-cover " style={{ backgroundImage: `url(/assets/images/others/bg-web-mc-land-page.svg)` }}>
                 <h2 className="font-semibold pb-4 md:text-center pt-8">RECENTLY VIEWED</h2>
                 <ProductSlider />

@@ -3,15 +3,20 @@ import { ProductSlider } from "../components/Carousels";
 import Searchbar from "../components/SearchEssentials/Searchbar";
 import NoResult from "../components/SearchEssentials/NoResult";
 import PopularSearches from "../components/SearchEssentials/PopularSearches";
+import { useSelector } from "react-redux";
+import SuggestionList from "../components/SearchEssentials/SuggestionList";
 
 
 const Search = () => {
-
+    const { searchItems } = useSelector(state => state.search);
     return (
         <div className=''>
             <Searchbar />
-
-            <NoResult />
+            {
+                searchItems && (searchItems?.length > 0
+                    ? <SuggestionList />
+                    : <NoResult />)
+            }
 
             <PopularSearches />
 

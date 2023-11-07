@@ -5,14 +5,14 @@ import Navbar from "../Nav/Navbar";
 import BackToTopButton from "../Utils/BackToTopButton";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isUserLoggedIn } from "../../store/slices/authSlice";
+import { addActiveAddress, isUserLoggedIn } from "../../store/slices/authSlice";
 import { getWishlist } from "../../store/asyncThunks/wishlistAsyncThunk";
 import { getCart } from "../../store/asyncThunks/cartAsyncThunk";
 import GifLoader from "../Loaders/GifLoader";
 import { includePath } from "../../Utils/CommonFunctions";
 
 
-const paths = ['login', 'signup', 'cart', 'write-review', 'profile', 'search', 'address', 'wallet', 'payment', 'order'];
+const paths = ['login', 'signup', 'cart', 'write-review', 'profile', 'address', 'wallet', 'payment', 'order'];
 
 const Layout = () => {
     const { pathname } = useLocation();
@@ -29,14 +29,18 @@ const Layout = () => {
     const { loading: wishlistLoading } = useSelector(state => state.wishlist);
     const { loading: authLoading } = useSelector(state => state.auth);
     const { loading: orderLoading } = useSelector(state => state.order);
+    const { loading: filterLoading } = useSelector(state => state.filter);
+    const { loading: searchLoading } = useSelector(state => state.search);
 
-    const loading = [cartLoading, wishlistLoading, authLoading, orderLoading];
+    const loading = [cartLoading, wishlistLoading, authLoading, orderLoading, filterLoading, searchLoading];
 
     const { authenticated } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     useEffect(() => {
         if (!authenticated) {
             dispatch(isUserLoggedIn());
+        } else {
+            dispatch(addActiveAddress());
         }
     }, [authenticated]);
 

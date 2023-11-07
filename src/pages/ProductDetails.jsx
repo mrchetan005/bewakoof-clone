@@ -27,6 +27,7 @@ const ProductDetails = () => {
     const [selectedColor, setSelectedColor] = useState(0);
     const [selectedSize, setSelectedSize] = useState(null);
 
+    const { authenticated } = useSelector(state => state.auth);
     const { isAddedToCart, cartItems } = useSelector(state => state.cart);
     const { wishlistItems } = useSelector(state => state.wishlist);
     const dispatch = useDispatch();
@@ -44,13 +45,15 @@ const ProductDetails = () => {
     }, [wishlistItems]);
 
     const handleWishlisted = () => {
+        if (!authenticated) {
+            return navigate('/login');
+        }
         if (wishlisted) {
             dispatch(removeFromWishlist(_id));
         } else {
             dispatch(addToWishlist(_id));
         }
     }
-
 
     // ! Cart Functions
 
