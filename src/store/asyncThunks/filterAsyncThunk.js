@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api";
-import { LIMIT_PER_PAGE } from "../../constants";
 
 export const getFilteredProducts = createAsyncThunk('filter/getFilteredProducts', async ({ url, page }) => {
     try {

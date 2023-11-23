@@ -30,7 +30,19 @@ const CategoryWrapper = () => {
     }, [isIntersecting]);
 
     const fetchData = (page) => {
-        let url = `/ecommerce/clothes/products?${pathnameArray[1] === 'search' ? 'search' : 'filter'}=${JSON.stringify(filter)}&page=${page}&limit=${LIMIT_PER_PAGE}`;
+        // checking if search page or not
+        // search api accepts only one value as string
+        // so here updating last selected value only for search
+        const filterObj = { ...filter };
+        if (pathnameArray[1] === 'search') {
+            for (const key in filterObj) {
+                if (Array.isArray(filterObj[key])) {
+                    filterObj[key] = filterObj[key].at(-1);
+                }
+            }
+        }
+
+        let url = `/ecommerce/clothes/products?${pathnameArray[1] === 'search' ? 'search' : 'filter'}=${JSON.stringify(filterObj)}&page=${page}&limit=${LIMIT_PER_PAGE}`;
 
         if (sort !== 0) {
             url += `&sort={"price":${sort}}`;
@@ -55,13 +67,11 @@ const CategoryWrapper = () => {
     }, [filter, sort]);
 
     useEffect(() => {
+        // collecting filters from query params
+        // converting them to array for multiple filters
         const filterFromParams = {};
         searchParams.forEach((value, key) => {
-            if (key === 'name') {
-                filterFromParams[key] = value;
-            } else {
-                filterFromParams[key] = value.split('_');
-            }
+            filterFromParams[key] = value.split('_');
         });
         if (pathnameArray[1].toLowerCase().includes('men')) {
             filterFromParams.gender = pathname.split('/')[1];
