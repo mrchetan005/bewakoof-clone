@@ -40,7 +40,6 @@ const ProductSlider = ({ filter, heading = '' }) => {
     }, []);
 
     const handlePrevClick = () => {
-        console.log({ elem: SwiperRef.current });
         SwiperRef.current.swiper?.slidePrev();
     }
     const handleNextClick = () => {

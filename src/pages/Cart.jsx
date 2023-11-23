@@ -38,7 +38,7 @@ const Cart = () => {
                                         {
                                             cartItems?.length > 0 &&
                                             cartItems?.slice(0)?.reverse()?.map((item) => (
-                                                <CartCard key={item._id} {...item?.product} quantity={item?.quantity} />
+                                                <CartCard key={item._id} {...item?.product} quantity={item?.quantity} size={item?.size} />
                                             ))
                                         }
                                     </div>

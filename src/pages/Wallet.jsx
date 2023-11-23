@@ -12,7 +12,6 @@ const Wallet = () => {
     const copyLink = () => {
         navigator.clipboard.writeText(window.location.origin)
             .then(() => {
-                console.log('Text copied to clipboard:', window.location.origin);
                 setShowLinkCopied('Link Copied');
                 setTimeout(setShowLinkCopied, 3000, '');
             })
@@ -24,9 +23,9 @@ const Wallet = () => {
     const handleShare = () => {
         if (window.innerWidth < 768 && navigator.share) {
             navigator.share({
-                title: '',
-                text: 'Content to share',
-                url: 'https://example.com'
+                title: 'Refer a Friend!',
+                text: 'Refer your friends and get exciting rewards!',
+                url: window.location.href
             })
                 .then(() => {
                     console.log('Successfully shared');

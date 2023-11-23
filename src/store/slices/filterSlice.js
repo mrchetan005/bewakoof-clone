@@ -5,7 +5,6 @@ const initialState = {
     products: [],
     filter: {},
     sort: 0,
-    previousFilterUrl: '',
     clearedFilters: true,
     loading: false,
     error: null
@@ -16,8 +15,6 @@ const filterSlice = createSlice({
     initialState,
     reducers: {
         setFilters(state, { payload }) {
-            state.previousFilter = state.filter;
-
             const { name, value } = payload;
 
             // ? I want to remove sellerTag for brands
@@ -57,11 +54,7 @@ const filterSlice = createSlice({
 
             state.clearedFilters = false;
         },
-        setPreviousFilterUrl(state, { payload }) {
-            state.previousFilterUrl = payload;
-        },
         setFilterFromParams(state, { payload }) {
-            console.log('payload', payload);
             if (payload?.sort) {
                 const { sort, ...remainingFilters } = payload;
                 state.sort = sort.join('');
@@ -87,7 +80,7 @@ const filterSlice = createSlice({
     extraReducers,
 });
 
-export const { setFilters, clearAllFilters, sortProducts, setPreviousFilterUrl, setFilterFromParams, setProducts, clearProducts } = filterSlice.actions;
+export const { setFilters, clearAllFilters, sortProducts, setFilterFromParams, setProducts, clearProducts } = filterSlice.actions;
 
 export default filterSlice.reducer;
 

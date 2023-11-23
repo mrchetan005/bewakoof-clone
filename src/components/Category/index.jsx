@@ -7,11 +7,12 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { LIMIT_PER_PAGE } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import MobileFilter from './MobileFilter';
-import { clearAllFilters, clearProducts, setFilterFromParams, setPreviousFilterUrl } from '../../store/slices/filterSlice';
+import { clearAllFilters, clearProducts, setFilterFromParams } from '../../store/slices/filterSlice';
 import { getFilteredProducts } from '../../store/asyncThunks/filterAsyncThunk';
 
 const CategoryWrapper = () => {
     const [page, setPage] = useState(1);
+    const [previousFilterUrl, setPreviousFilterUrl] = useState('');
     const { pathname } = useLocation();
     const [searchParams] = useSearchParams();
 
@@ -19,7 +20,7 @@ const CategoryWrapper = () => {
     const heading = pathnameArray[1] === 'c' || pathnameArray[1] === 'search' ? decodeURI(pathnameArray[2]) : decodeURI(pathnameArray[1]);
 
     const { isIntersecting } = useSelector(state => state.intersection);
-    let { products, filter, sort, previousFilterUrl } = useSelector(state => state.filter);
+    let { products, filter, sort } = useSelector(state => state.filter);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -29,10 +30,6 @@ const CategoryWrapper = () => {
     }, [isIntersecting]);
 
     const fetchData = (page) => {
-        if (pathnameArray[1].toLowerCase().includes('men')) {
-            filter = { ...filter, gender: pathname.split('/')[1] };
-        }
-
         let url = `/ecommerce/clothes/products?${pathnameArray[1] === 'search' ? 'search' : 'filter'}=${JSON.stringify(filter)}&page=${page}&limit=${LIMIT_PER_PAGE}`;
 
         if (sort !== 0) {
@@ -40,8 +37,8 @@ const CategoryWrapper = () => {
         }
         const flag = url === previousFilterUrl;
         if (!flag) {
-            dispatch(setPreviousFilterUrl(url));
-            dispatch(getFilteredProducts({ url }));
+            setPreviousFilterUrl(url);
+            dispatch(getFilteredProducts({ url, page }));
         }
     }
 
@@ -52,9 +49,9 @@ const CategoryWrapper = () => {
     }, [page]);
 
     useEffect(() => {
+        dispatch(clearProducts());
         setPage(1);
         fetchData(1);
-        dispatch(clearProducts());
     }, [filter, sort]);
 
     useEffect(() => {
@@ -66,6 +63,9 @@ const CategoryWrapper = () => {
                 filterFromParams[key] = value.split('_');
             }
         });
+        if (pathnameArray[1].toLowerCase().includes('men')) {
+            filterFromParams.gender = pathname.split('/')[1];
+        }
         if (Object.keys(filterFromParams).length > 0) {
             dispatch(setFilterFromParams(filterFromParams));
         } else {

@@ -10,9 +10,9 @@ export const getCart = createAsyncThunk('cart/getCart', async () => {
     }
 });
 
-export const addToCart = createAsyncThunk('cart/addToCart', async ({ productId, quantity }) => {
+export const addToCart = createAsyncThunk('cart/addToCart', async ({ productId, quantity, size }) => {
     try {
-        const data = await api.patch(`/ecommerce/cart/${productId}`, { quantity: Number(quantity) });
+        const data = await api.patch(`/ecommerce/cart/${productId}`, { quantity: Number(quantity), size });
         return data?.data;
     } catch (error) {
         return Promise.reject(error?.response?.data);

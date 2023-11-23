@@ -3,14 +3,17 @@
 import { Link } from 'react-router-dom';
 import { AiFillStar } from 'react-icons/ai';
 import { getDiscountedPrice, getRandomDiscount } from '../../Utils/CommonFunctions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../store/asyncThunks/cartAsyncThunk';
 import { removeFromWishlist } from '../../store/asyncThunks/wishlistAsyncThunk';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { checkItemIsAddedToCart } from '../../store/slices/cartSlice';
 
 const WishlistCard = ({ _id, brand, displayImage, name, price, ratings }) => {
     const discount = useRef(getRandomDiscount(20, 80));
     const dispatch = useDispatch();
+    const { isAddedToCart } = useSelector(state => state.cart);
+
 
     const removeItem = (e) => {
         e && e.stopPropagation();
@@ -22,6 +25,10 @@ const WishlistCard = ({ _id, brand, displayImage, name, price, ratings }) => {
         dispatch(addToCart({ productId: _id, quantity: 1 }));
         removeItem();
     }
+
+    useEffect(() => {
+        dispatch(checkItemIsAddedToCart(_id));
+    }, []);
 
     return (
         <div className='relative'>
@@ -63,10 +70,10 @@ const WishlistCard = ({ _id, brand, displayImage, name, price, ratings }) => {
             <div className="removeItem absolute top-2 right-2 cursor-pointer" onClick={removeItem}>
                 <img src="/assets/icons/crossBtnIcon.svg" alt="" />
             </div>
-            <div className="addToBag flex items-center justify-center gap-2 cursor-pointer border border-t-0 text-[10px] text-[#207bb4] px-3 py-2 font-semibold hover:text-[#333] hover:bg-[#e6e6e6]" onClick={addToBag}>
+            {!isAddedToCart && <div className="addToBag flex items-center justify-center gap-2 cursor-pointer border border-t-0 text-[10px] text-[#207bb4] px-3 py-2 font-semibold hover:text-[#333] hover:bg-[#e6e6e6]" onClick={addToBag}>
                 <img src="/assets/icons/bag-blue.svg" alt="" />
                 <span className=''>ADD TO BAG</span>
-            </div>
+            </div>}
         </div>
     )
 }

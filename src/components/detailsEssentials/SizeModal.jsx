@@ -5,7 +5,6 @@ import SizeOptions from './SizeOptions';
 import { memo } from 'react';
 
 const SizeModal = ({ size, selectedSize, setSelectedSize, onClose, setAddedToBag }) => {
-    console.log(!!selectedSize);
 
     const handleClick = (e) => {
         onClose(e);

@@ -19,6 +19,7 @@ import Review from "../components/detailsEssentials/Review";
 import TrustBagge from "../components/Utils/TrustBagge";
 import PincodeCheckForm from "../components/Forms/PincodeCheckForm";
 import GifLoader from "../components/Loaders/GifLoader";
+import { sizes } from "../constants";
 
 
 const ProductDetails = () => {
@@ -62,7 +63,7 @@ const ProductDetails = () => {
     }, [cartItems]);
 
     const setAddedToBag = () => {
-        dispatch(addToCart({ productId: _id, quantity: 1 }));
+        dispatch(addToCart({ productId: _id, quantity: 1, size: sizes[selectedSize]?.size }));
     }
 
     const handleAddedToBag = () => {

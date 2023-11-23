@@ -10,7 +10,7 @@ const swiperParams = {
   slidesPerGroup: 1,
   spaceBetween: 10,
   loop: true,
-  // speed: 1000,
+  speed: 1000,
   autoPlay: true,
   breakpoints: {
     200: {
@@ -32,7 +32,6 @@ const Carousel = () => {
   }, []);
 
   const handlePrevClick = () => {
-    console.log({ elem: SwiperRef.current });
     SwiperRef.current.swiper?.slidePrev();
   }
   const handleNextClick = () => {

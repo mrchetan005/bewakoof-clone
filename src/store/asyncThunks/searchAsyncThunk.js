@@ -17,7 +17,6 @@ export const extraReducers = (builder) => {
             state.loading = true;
         })
         .addCase(searchItems.fulfilled, (state, { payload }) => {
-            console.log('payload', payload);
             state.loading = false;
             state.searchItems = payload?.data;
         })

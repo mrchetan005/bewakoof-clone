@@ -1,15 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { memo } from "react";
-
-const sizes = [
-    { size: 'S', chest: '42.0', frontLength: '29.0', sleeveLength: '9.75' },
-    { size: 'M', chest: '44.0', frontLength: '29.75', sleeveLength: '10.0' },
-    { size: 'L', chest: '46.0', frontLength: '30.5', sleeveLength: '10.25' },
-    { size: 'XL', chest: '48.0', frontLength: '31.25', sleeveLength: '10.5' },
-    { size: 'XXL', chest: '50.0', frontLength: '32.0', sleeveLength: '10.75' },
-    { size: 'XXXL', chest: '52.0', frontLength: '32.75', sleeveLength: '11.0' },
-];
+import { sizes } from "../../constants";
 
 const SizeOptions = ({ size: availableSize, selectedSize, setSelectedSize }) => {
 

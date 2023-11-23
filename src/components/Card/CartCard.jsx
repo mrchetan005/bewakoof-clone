@@ -14,8 +14,9 @@ import { AiOutlineClose } from "react-icons/ai";
 const sizes = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
 const quantities = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const CartCard = ({ _id, brand, displayImage, name, price, quantity }) => {
+const CartCard = ({ _id, brand, displayImage, name, price, quantity, size }) => {
     const [qty, setQty] = useState(1);
+    const [prodSize, setProdSize] = useState(size);
     const [wishlisted, setWishlisted] = useState(false);
     const dispatch = useDispatch();
 
@@ -27,7 +28,12 @@ const CartCard = ({ _id, brand, displayImage, name, price, quantity }) => {
     const handleQty = (qtyToSet) => {
         setQty(qtyToSet);
         const resQty = qtyToSet - quantity;
-        dispatch(addToCart({ productId: _id, quantity: resQty }));
+        dispatch(addToCart({ productId: _id, quantity: resQty, size: prodSize }));
+    }
+
+    const handleSize = (sizeToSet) => {
+        setProdSize(sizeToSet);
+        dispatch(addToCart({ productId: _id, quantity: 0, size: sizeToSet }));
     }
 
     const { wishlistItems } = useSelector(state => state.wishlist);
@@ -42,9 +48,9 @@ const CartCard = ({ _id, brand, displayImage, name, price, quantity }) => {
         dispatch(removeFromCart(_id));
     }
 
-    const moveToBag = (e) => {
+    const moveToWishlist = (e) => {
         e && e.stopPropagation();
-        dispatch(addToWishlist({ productId: _id, quantity: 1 }));
+        dispatch(addToWishlist(_id));
         removeItem();
     }
 
@@ -63,7 +69,7 @@ const CartCard = ({ _id, brand, displayImage, name, price, quantity }) => {
                         </div>
                         <div className="cartProdInfoMsg block text-xs md:text-sm text-[#1d8802] font-medium pt-1 pb-3">You saved ₹{discountPrice - price}!</div>
                         <div className="cartModOptionWrap flex gap-5 py-2">
-                            <CartModOptions options={sizes} title={'Size'} heading={'Select Size'} />
+                            <CartModOptions initialQuantity={prodSize} handleQty={handleSize} options={sizes} title={'Size'} heading={'Select Size'} />
                             <CartModOptions initialQuantity={quantity} handleQty={handleQty} options={quantities} title={'Qty'} heading={'Select Quantity'} />
                         </div>
                         {/* <div className="cartProdInfoMsg text-sm text-[#db3a34] font-medium">Hurry! Only 18 left!</div> */}
@@ -83,7 +89,7 @@ const CartCard = ({ _id, brand, displayImage, name, price, quantity }) => {
             </div>
             <div className="cartBottomAction hidden md:flex px-4 text-sm text-[#00000080] text-center">
                 <button onClick={removeItem} className="remove py-5 border-r border-t flex-1 cursor-pointer">Remove</button>
-                <button disabled={wishlisted} onClick={moveToBag} className={`addToWishlist py-5 border-l border-t flex-[2] cursor-pointer`}>{wishlisted ? '' : 'Move to Wishlist'}</button>
+                <button disabled={wishlisted} onClick={moveToWishlist} className={`addToWishlist py-5 border-l border-t flex-[2] cursor-pointer`}>{wishlisted ? '' : 'Move to Wishlist'}</button>
             </div>
 
 

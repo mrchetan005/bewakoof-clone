@@ -56,7 +56,6 @@ const AddressForm = ({ onClose }) => {
         const address = [...user.address];
         if (params?.addressId) {
             const index = address?.findIndex((addr) => addr._id === params?.addressId);
-            console.log(index);
             if (index !== -1) {
                 address?.splice(index, 1, newAddress);
             }

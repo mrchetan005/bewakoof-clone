@@ -30,14 +30,12 @@ const WriteReview = () => {
             }, 1000);
             return;
         }
-        console.log({ ratings, text });
         post(`/ecommerce/review/${_id}`, { ratings, text: text.trim() });
 
     }
 
     useEffect(() => {
         if (data?.data?.status === 'success') {
-            console.log('success');
             navigate(-1);
         }
     }, [data]);
