@@ -4,17 +4,21 @@ import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { Link, createSearchParams } from 'react-router-dom';
 import { bannerItems } from '../../constants';
 
-
 const swiperParams = {
-  slidesPerView: 3,
   slidesPerGroup: 1,
   spaceBetween: 10,
   loop: true,
   speed: 1000,
-  autoPlay: true,
+  autoplay: {
+    delay: 3500,
+    disableOnInteraction: false,
+  },
   breakpoints: {
     200: {
       slidesPerView: 1,
+    },
+    500: {
+      slidesPerView: 2,
     },
     768: {
       navigation: true,
@@ -45,7 +49,7 @@ const Carousel = () => {
   }, []);
 
   return (
-    <div className='relative'>
+    <div className='relative top-4 sm:top-2 md:top-0 '>
       <div onClick={handlePrevClick} className="absolute shadow-md h-10 w-10 hidden md:flex items-center justify-center hover:shadow-sm  rounded-full z-10 left-2 top-1/2 -translate-y-1/2 cursor-pointer bg-white bg-opacity-50 hover:bg-opacity-40"><SlArrowLeft className="w-6 h-6 text-gray-500 mr-1" /></div>
       <swiper-container
         init="false"

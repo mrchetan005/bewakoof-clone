@@ -58,9 +58,11 @@ export const sortByPrice = [
 
 export const bannerItems = [
     { id: 1, filter: { brand: 'Bewakoof Air® 1.0_Bewakoof®' } },
-    { id: 2, filter: { subCategory: 'hoodie_sweater' } },
+    { id: 2, filter: { subCategory: 'hoodie' } },
     { id: 3, filter: { brand: 'OFFICIAL NARUTO MERCHANDISE' } },
-    { id: 4, filter: { brand: 'OFFICIAL COCA COLA MERCHANDISE' } }
+    { id: 4, filter: { brand: 'OFFICIAL COCA COLA MERCHANDISE' } },
+    { id: 5, filter: { subCategory: 'jogger' } },
+    { id: 6, filter: { subCategory: 'sweater' } }
 ];
 
 export const popularSearches = [
