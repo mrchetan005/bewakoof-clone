@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiFillStar } from 'react-icons/ai';
 import { getDiscountedPrice, getRandomDiscount } from '../../Utils/CommonFunctions';
 import { useDispatch, useSelector } from "react-redux";
@@ -14,9 +14,10 @@ const Card = ({ _id, brand, displayImage, name, price, ratings, fabric }) => {
     const [imgLoad, setImgLoad] = useState(true);
     const { pathname } = useLocation();
     const discount = useRef(getRandomDiscount(20, 80));
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const { authenticated } = useSelector(state => state.auth);
     const { wishlistItems } = useSelector(state => state.wishlist);
 
     useEffect(() => {
@@ -24,11 +25,16 @@ const Card = ({ _id, brand, displayImage, name, price, ratings, fabric }) => {
         setWishlisted(addedToWishlist);
     }, [wishlistItems]);
 
+
     const handleWishlisted = () => {
-        if (wishlisted) {
-            dispatch(removeFromWishlist(_id));
+        if (!authenticated) {
+            navigate('/login');
         } else {
-            dispatch(addToWishlist(_id));
+            if (wishlisted) {
+                dispatch(removeFromWishlist(_id));
+            } else {
+                dispatch(addToWishlist(_id));
+            }
         }
     }
 

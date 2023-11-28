@@ -67,6 +67,9 @@ const ProductDetails = () => {
     }
 
     const handleAddedToBag = () => {
+        if (!authenticated) {
+            return navigate('/login');
+        }
         if (isAddedToCart) {
             navigate('/cart')
         } else {
